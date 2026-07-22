@@ -18,6 +18,8 @@
         <spring.boot.version>3.2.5</spring.boot.version>
         <cucumber.version>7.33.0</cucumber.version>
         <restassured.version>6.0.0</restassured.version>
+        <maven.compiler.source>17</maven.compiler.source>
+        <maven.compiler.target>17</maven.compiler.target>
     </properties>
 
     <dependencies>
@@ -29,6 +31,14 @@
         <scope>compile</scope>
     </dependency>
 
+        <!-- Source: https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter-api</artifactId>
+            <version>6.1.1</version>
+            <scope>test</scope>
+        </dependency>
+
     <!-- Source: https://mvnrepository.com/artifact/io.rest-assured/rest-assured -->
     <dependency>
         <groupId>io.rest-assured</groupId>
@@ -37,6 +47,11 @@
         <scope>test</scope>
     </dependency>
 
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.17.2</version> <!-- You can use the latest stable version -->
+        </dependency>
 
 
     </dependencies>

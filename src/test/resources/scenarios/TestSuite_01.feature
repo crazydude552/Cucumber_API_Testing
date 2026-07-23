@@ -9,7 +9,7 @@ Feature: Validate the Rest endpoint https://demo.realworld.show/
     Then the user get valid response code 200
 
   Scenario: When user connect to rest endpoint, with invalid credentials, the login unsuccesful, and response code is 401
-    Given the user connect to the rest endpoint "https://demo.realworld.show/"
+    Given the user connect to the rest endpoint "https://api.realworld.show/"
     When Post the invalid credentials
       |username | password |
       |test     |  test    |

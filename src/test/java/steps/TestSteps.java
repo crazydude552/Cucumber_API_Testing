@@ -12,14 +12,18 @@ import java.util.List;
 import java.util.Map;
 
 import static io.restassured.RestAssured.given;
+import static io.restassured.RestAssured.requestSpecification;
+
 import org.junit.jupiter.api.Assertions;
+import utils.ApiClient;
 
 public class TestSteps {
 
-    public Response response;
+    private final ApiClient api = new ApiClient();
+
+    private Response response;
     @Given("the user connect to the rest endpoint {string}")
     public void the_endpoint(String ep) {
-        System.out.println(ep+"\n");
         RestAssured.baseURI = ep;
 
     }
@@ -34,20 +38,14 @@ public class TestSteps {
         // Manually format the JSON string to bypass the serializer requirement
         String jsonBody = String.format("{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}", email, password);
 
-        response = given()
-                .contentType(ContentType.JSON)
-                .body(jsonBody) // Passing a raw String works out-of-the-box
-                .when()
-                .post("api/users/login")
-                .then()
-                .extract().response();
+        response=api.post("api/users/login",jsonBody);
+
 
 
         // 3. Asserting Specific JSON Values using JsonPath
         JsonPath jsonPath = response.jsonPath();
         String actualEmail = jsonPath.getString("user.email");
         String actualToken = jsonPath.getString("user.token");
-        System.out.println(actualEmail);
         Assertions.assertEquals("pvmrmoorthy@gmail.com", actualEmail, "Email in response match payload");
         Assertions.assertNotNull(actualToken, "Authorization token was missing from response");
     }
@@ -63,11 +61,21 @@ public class TestSteps {
     }
 
     @When("Post the invalid credentials")
-    public void postTheInvalidCredentials() {
+    public void postTheInvalidCredentials(DataTable dataTable) {
+        List<Map<String, String>> rows = dataTable.asMaps(String.class, String.class);
+        String email = rows.get(0).get("email");
+        String password = rows.get(0).get("password");
+
+        // Manually format the JSON string to bypass the serializer requirement
+        String jsonBody = String.format("{\"user\":{\"email\":\"%s\",\"password\":\"%s\"}}", email, password);
+
+        response=api.post("api/users/login",jsonBody);
     }
 
     @Then("the user unauthorized with response code {int}")
     public void theUserUnauthorizedWithResponseCode(int arg0) {
+        int actualStatusCode = response.getStatusCode();
+        Assertions.assertEquals(actualStatusCode,arg0);
     }
 
 
